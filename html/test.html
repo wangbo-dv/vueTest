@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../vue/vue.min.js"></script>
+		<script src="../vue/vue.js"></script>
+		<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+	</head>
+	<style>
+		.red{
+			background-color: red;
+		}
+		.yellow{
+			background-color: yellow;
+		}
+	</style>
+	<body>
+		<div id="box" v-show="isShow">
+			{{20+30}}
+			<p v-html="myHtml"></p>
+		</div>
+		<div id="classTest">
+			<p :class="isBack?'red':'yellow'">1231231231</p>
+			<button @click="click">点击</button>
+		</div>
+	</body>
+<script>
+	let vue = new Vue({
+		el:"#box",
+		data:{
+			isShow:true,
+			myHtml:"<a href='https://www.baidu.com'>百度</a>"
+		}
+	})
+	let vue1 =new Vue({
+		el:"#classTest",
+		data:{isBack:true
+		},
+		methods:{
+			click(){
+				this.isBack=!this.isBack;
+					this.$http.get("http://localhost:8006/createMenu").then(function(response){
+						console.log(response.data)
+					},function(re){
+						console.log(re);
+					})
+				
+			}
+		}
+	})
+</script>
+</html>

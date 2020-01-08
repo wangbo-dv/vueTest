@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../vue/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	</head>
+	<body>
+		<div id="box">
+			<input type="text" @input="inputHandle()" v-model="myText" @blur="remove()" style="width: 200px;" @click="showClick()">
+			<div style="background-color: aliceblue;width: 200px;">
+				<div v-for="data in getInputshowList" @click="checkThis(data)" style="background-color: white; border: 1px solid antiquewhite;">
+					{{data}}
+				</div>
+			</div>
+			
+			<table v-if="JSON.stringify(showList)!='{}'">
+				<th >
+					<td>id</td>
+					<td>name</td>
+					<td>img</td>
+				</th>
+				<tr v-for="data in showList">
+					<td>{{data.id}}</td>
+					<td>{{data.name}}</td>
+					<td><img v-bind:src="data.headUrl" style="height: 20px; width: 20px;"/></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+	<script>
+		let vue = new Vue({
+			el:"#box",
+			data:{
+				dataList:[],
+				list:['asd','efd','cgn','gg','wer'],
+				myText:'',
+				checkVlaue:"",
+				showList:{}
+			},
+			methods:{
+				inputHandle(){
+					// let newList = this.list.filter(item=>{
+					// 	return item.indexOf(this.myText)>-1;
+					// })
+					// this.dataList=newList
+				},
+				checkThis(v){
+					this.myText=v
+					console.log(v)
+					this.dataList=[]
+				},
+				remove(){
+					if(this.list.indexOf(this.myText)==-1){
+						this.myText=''
+					}
+				},
+				showClick(){
+					if(this.myText!=''){
+						return;
+					}
+					this.dataList=this.list
+					// fetch('../json/test.json').then(res=>res.json()).then(res=>{console.log(res);this.showList=res.data})//w3c标准
+					axios.get("../json/test.json").then(res=>{
+						console.log(res.data)
+						this.showList=res.data.data;
+					}).catch(res=>{
+						console.log(res)
+					}).finally(function(){
+						console.log("执行了finally")
+					})
+				}
+			},
+			computed:{
+				getShowList(){
+					return this.showList.clear();
+				},
+				getInputshowList(){
+					return  this.list.filter(item=>{return item.indexOf(this.myText)>-1})
+				}
+			}
+		})
+		
+	</script>
+</html>
